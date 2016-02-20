@@ -1,0 +1,345 @@
+[%#
+
+Copyright (c) 2016, Juniper Networks Inc.
+All rights reserved.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+
+%]
+
+html {
+    height: 100%;
+}
+
+body {
+    background-color: [% site.col.page %];
+    color: [% site.col.text %];
+    margin: 0px;
+    padding: 0px;
+    height: 100%;
+}
+
+#header {
+    background-color: [% site.col.head %];
+    border-bottom: 1px solid [% site.col.line %];
+}
+
+#footer {
+    background-color: [% site.col.head %];
+    text-align: center;
+    border-top: 1px solid [% site.col.line %];
+    bottom: 0;
+    left: 0px;
+    width: 100%;
+    padding: 4px;
+}
+
+#content {
+    padding: 10px;
+}
+
+div.quick-links {
+    text-align: center;
+}
+
+div.bread-crumbs {
+    font-size: 16px;
+    text-decoration: none;
+    color: [% site.col.line %];
+}
+
+h1.title {
+    text-align: center;
+    padding: 4px;
+    margin: 0px;
+}
+
+.message {
+    color: [% site.col.message %];
+}
+
+.error {
+    color: [% site.col.error %];
+}
+
+div.label-table {
+    font-size: 22px;
+    font-weight: bold;
+    text-align: center;
+    padding: 10px;
+}
+
+div.view-lock {
+    padding-left: 15px;
+}
+
+.view-lock table {
+    font-size: 12px;
+    border-style: solid;
+    border-width: 1px;
+    border-collapse: collapse;
+    margin: auto;
+    width: 100%;
+}
+
+.view-lock th {
+    padding: 5px;
+    text-align: right;
+    vertical-align: top;
+    width: 100px;
+}
+
+.view-lock tr {
+    font-size: 1.1em;
+    text-align: left;
+}
+
+.view-lock td {
+    padding: 5px;
+}
+
+div.view-locations {
+    padding-left: 15px;
+}
+
+.view-locations table {
+    font-size: 12px;
+    border-style: solid;
+    border-width: 1px;
+    border-collapse: collapse;
+    margin: auto;
+    width: 100%;
+}
+
+.view-locations th {
+    padding: 5px;
+    text-align: right;
+    width: 100px;
+}
+
+.view-locations tr {
+    font-size: 1.1em;
+    text-align: left;
+}
+
+.view-locations td {
+    padding: 5px;
+}
+
+div.view-enforcements {
+    padding-left: 15px;
+}
+
+.view-enforcement-enabled table {
+    font-size: 12px;
+    border-style: solid;
+    border-width: 1px;
+    border-collapse: collapse;
+    margin: auto;
+    width: 100%;
+}
+
+.view-enforcement-enabled th {
+    padding: 5px;
+    text-align: right;
+    width: 130px;
+}
+
+.view-enforcement-enabled tr {
+    font-size: 1.1em;
+    text-align: left;
+}
+
+.view-enforcement-enabled td {
+    padding: 5px;
+}
+
+.view-enforcement-enabled input[type=text] {
+    width: 100%;
+}
+
+.view-enforcement-enabled textarea {
+    width: 100%;
+}
+
+.view-lock textarea {
+    width: 100%;
+}
+
+.view-enforcement-disabled table {
+    font-size: 12px;
+    border-style: solid;
+    border-width: 1px;
+    border-collapse: collapse;
+    margin: auto;
+    width: 100%;
+    background-color: #d09090;
+}
+
+.view-enforcement-disabled th {
+    padding: 5px;
+    text-align: right;
+    width: 130px;
+}
+
+.view-enforcement-disabled tr {
+    font-size: 1.1em;
+    text-align: left;
+    color: #f0f0f0;
+}
+
+.view-enforcement-disabled td {
+    padding: 5px;
+}
+
+.view-enforcement-disabled input[type=text] {
+    width: 100%;
+}
+
+.view-enforcement-disabled textarea {
+    width: 100%;
+}
+
+#enforcement-controls table {
+    margin-left: auto;
+    margin-right: auto;
+    border: none;
+    width: auto;
+}
+
+#enforcement-controls tr {
+    float: left;
+}
+
+#enforcement-controls td {
+    height: 2em;
+    padding: 0px;
+    border: solid;
+    border-color: #ffffff;
+}
+
+#enforcement-controls td.active {
+    background: [% site.col.controlBGActive %];
+    color: #f0f0f0;
+}
+
+#enforcement-controls td.active:hover {
+    background: #d0f0f0;
+    color: [% site.col.text %];
+}
+
+#enforcement-controls td.inactive {
+    background: [% site.col.controlBGInactive %];
+    color: #f0f0f0;
+}
+
+#enforcement-controls a {
+    color: #f0f0f0;
+    text-decoration: none;
+    font-weight: bold;
+    padding: 0.2em 1em;
+}
+
+#enforcement-controls a:hover {
+    color: [% site.col.text %];
+}
+
+#enforcement-controls p {
+    background: [% site.col.controlBGInactive %];
+    color: #f0f0f0;
+    font-weight: bold;
+    padding: 0.2em 1em;
+}
+
+#enforcement-controls input[type=submit] {
+    font-family: Times;
+    font-size: 1.0em;
+    font-weight: bold;
+    color: #F0F0F0;
+    background: [% site.col.controlBGActive %];
+    border: none;
+    height: 100%;
+    width: 100%;
+}
+
+#enforcement-controls input[type=submit]:hover {
+    color: [% site.col.text %];
+    background: #d0f0f0;
+}
+
+p.lock-message {
+    font-family: Courier;
+    white-space: pre;
+}
+
+.grid-table table {
+    font-size: 12px;
+    border-collapse: collapse;
+    margin: auto;
+    width: 100%;
+}
+
+.grid-table th {
+    padding: 5px;
+    border-style: none;
+    border-width: 1px;
+    background-color: #e0f0ff;
+}
+
+.grid-table tr {
+    font-size: 1.1em;
+    line-height: 140%;
+    text-align: left;
+    line-height: 2em;
+}
+
+.grid-table .odd-row td {
+    background-color: #ffffff;
+}
+
+.grid-table .even-row td {
+    background-color: #e8e8e8;
+}
+
+.grid-table td {
+    padding: 5px;
+    border-style: none;
+    border-width: 1px;
+}
+
+div.errors {
+    border: solid;
+    border-color: #FF0000;
+    background-color: #FFBBBB;
+    padding: 0px 0px 0px 5px;
+    color: #990000;
+    margin: 0px 0px 10px 0px;
+}
+
+div.messages {
+    border: solid;
+    border-color: #00FF00;
+    background-color: #BBFFBB;
+    padding: 0px 0px 0px 5px;
+    color: #009900;
+    margin: 0px 0px 10px 0px;
+}
+
+div.broadcasts {
+    border: solid;
+    border-color: #FFFF00;
+    background-color: #FFFFBB;
+    padding: 0px 0px 0px 5px;
+    color: #999900;
+    margin: 0px 0px 10px 0px;
+}

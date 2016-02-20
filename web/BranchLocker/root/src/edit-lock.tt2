@@ -1,0 +1,151 @@
+[%#
+
+Copyright (c) 2016, Juniper Networks Inc.
+All rights reserved.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+
+%]
+
+[% META title = 'Welcome to Branch Locker' %]
+<div class="bread-crumbs">
+    <a href="[% c.uri_for('/lock') _ '?id=' _ id %]">Back</a>
+</div>
+
+<div class="lock-data">
+    <h1>[% lock.name | html%]</h1>
+    <div class="view-lock">
+        <form
+            action="[% c.uri_for('/submit_legacy_edit_lock') %]"
+            method="POST"
+        />
+        <input
+            type="hidden"
+            name="id"
+            value="[% id | html %]"
+        />
+        <input
+            type="hidden"
+            name="from_lock_id"
+            value="[% id | html %]"
+        />
+        <input
+            type="hidden"
+            name="old_name"
+            value="[% lock.name | html %]"
+        />
+        <input
+            type="hidden"
+            name="old_status"
+            value="[% lock.status | html %]"
+        />
+        <input
+            type="hidden"
+            name="old_users_who_can_edit"
+            value="[% lock.gate_keepers | html %]"
+        />
+        <input
+            type="hidden"
+            name="old_message"
+            value="[% lock.message | html %]"
+        />
+        <input
+            type="hidden"
+            name="from_edit_lock"
+            value="1"
+        />
+        <table>
+            <tr>
+                <th>Name:</th>
+                <td><input
+                    type="text"
+                    name="new_name"
+                    value="[% lock.name | html %]"
+                    [% can_edit %]
+                    disabled
+                /></td>
+            </tr>
+            <tr>
+                <th>Status:</th>
+                <td><select
+                    name="new_status"
+                    [% can_enable %]
+                >
+                    <option value="open"
+                    [% IF lock.status == 'open' %]
+                        selected
+                    [% END %]
+                    >Open</option>
+                    <option value="restricted"
+                    [% IF lock.status == 'restricted' %]
+                        selected
+                    [% END %]
+                    >Restricted</option>
+                    <option value="closed"
+                    [% IF lock.status == 'closed' %]
+                        selected
+                    [% END %]
+                    >Closed</option>
+                </select></td>
+            </tr>
+            <tr>
+                <th>Gate Keepers:</th>
+                <td><textarea
+                    rows="1"
+                    name="new_users_who_can_edit"
+                    [% admin_only %]
+                >[% lock.gate_keepers | html %]</textarea>
+                </td>
+            </tr>
+            <tr>
+                <th>Message:</th>
+                <td><textarea
+                    rows="8" cols="80"
+                    name="new_message"
+                    [% can_edit %]
+                >[% lock.message | html %]</textarea>
+                </td>
+            </tr>
+            <tr>
+                <td colspan=2>
+                    <div id="enforcement-controls">
+                        <table>
+                            <tr>
+                                [% IF can_submit == "disabled" %]
+                                <td class="inactive">
+                                    <p>Submit</p>
+                                [% ELSE %]
+                                <td class="active">
+                                    <input
+                                        type="submit"
+                                        value="Submit"
+                                        [% can_submit %]
+                                    />
+                                [% END %]
+                                </td>
+                                <td class="active">
+                                    <a href="[%
+                                        c.uri_for('/lock') _
+                                        '?id=' _
+                                        id
+                                    %]">Cancel</a>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </td>
+            </tr>
+        </table>
+        </form>
+    </div>
+</div>

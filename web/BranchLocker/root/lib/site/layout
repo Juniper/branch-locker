@@ -1,0 +1,54 @@
+[%#
+
+Copyright (c) 2016, Juniper Networks Inc.
+All rights reserved.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+
+%]
+
+<div id="header">[% PROCESS site/header %]</div>
+
+<div id="content">
+[% IF c.config.broadcasts.defined %]
+<div class="broadcasts">
+    <ul>
+        [% FOREACH broadcast IN c.config.broadcasts %]
+        <li>[% broadcast | html %]</li>
+        [% END %]
+    </ul>
+</div>
+[% END %]
+[% IF errors.defined %]
+<div class="errors">
+    <h2 style="margin:5px;">Errors:</h2>
+    <ul>
+        [% FOREACH error IN errors %]
+        <li>[% error | html %]</li>
+        [% END %]
+    </ul>
+</div>
+[% END %]
+[% IF messages.defined %]
+<div class="messages">
+    <ul>
+        [% FOREACH message IN messages %]
+        <li>[% message | html %]</li>
+        [% END %]
+    </ul>
+</div>
+[% END %]
+[% content %]
+</div>
+
+<div id="footer">[% PROCESS site/footer %]</div>

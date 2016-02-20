@@ -1,0 +1,169 @@
+[%#
+
+Copyright (c) 2016, Juniper Networks Inc.
+All rights reserved.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+
+%]
+
+[% META title = 'Welcome to Branch Locker' %]
+<div class="bread-crumbs">
+    <a href="[% c.uri_for('/') %]">Home</a>
+</div>
+<div class="lock-data">
+    <h1>[% lock.name | html%]</h1>
+    <div class="view-lock">
+        <table>
+            <tr>
+                <th>Status:</th>
+                <td>[% lock.status       | html %]</td>
+            </tr>
+            <tr>
+                <th>Gate Keepers:</th>
+                <td>[% lock.gate_keepers | html %]</td>
+            </tr>
+            [% IF lock.request_change %]
+            <tr>
+                <td style="padding: 5px 5px 5px 115px;" colspan="2"><a href="[% lock.request_change | html %]">Request Gate Keeper Change</a></td>
+            </tr>
+            [% END %]
+            <tr>
+                <th>Message:</th>
+                <td><p class="lock-message">[% lock.message | html %]</p></td>
+            </tr>
+            <tr>
+                <td colspan=2>
+                    <div id="enforcement-controls">
+                        <table>
+                            <tr>
+                                [% IF lock.can_edit %]
+                                <td class="active">
+                                    <a href="[%
+                                        c.uri_for('/edit_lock') _
+                                        '?id=' _
+                                        lock.id
+                                    %]">Edit</a>
+                                [% ELSE %]
+                                <td class="inactive">
+                                    <p>Edit</p>
+                                [% END %]
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div class="view-lock">
+        <h2>Summary of Permissions:</h2>
+        <table>
+            <tr>
+                <th>Allowed Users:</th>
+                <td>[% lock.allowed_users | html %]</td>
+            </tr>
+            <tr>
+                <th>Allowed PRs:</th>
+                <td>[% lock.allowed_prs | html %]</td>
+            </tr>
+        </table>
+    </div>
+    <div class="view-locations">
+        <h2>Locations:</h2>
+        [% FOREACH location IN lock.locations %]
+        <table>
+            <tr>
+                <th>Repository:</th>
+                <td>[% location.repository | html %]</td>
+            </tr>
+            <tr>
+                <th>Paths:</th>
+                <td>[% location.paths.shift | html %]</td>
+            </tr>
+            [% FOREACH path IN location.paths %]
+            <tr>
+                <td></td>
+                <td>[% path | html %]</td>
+            </tr>
+            [% END %]
+        </table>
+        [% END %]
+    </div>
+    <div class="view-enforcements">
+        <h2>Enforcements:</h2>
+        [% FOREACH enforcement IN lock.enforcements %]
+        <div class="view-enforcement-[% enforcement.enabled_class | html %]">
+            <table>
+                <tr>
+                    <th>Enforcement Name:</th>
+                    <td>[% enforcement.name | html %]</td>
+                </tr>
+                <tr>
+                    <th>Is Enabled:</th>
+                    <td>[% enforcement.is_enabled_string | html %]</td>
+                </tr>
+                <tr>
+                    <th>Users who can enable:</th>
+                    <td>[% enforcement.users_who_can_enable | html %]</td>
+                </tr>
+                <tr>
+                    <th>Users who can edit:</th>
+                    <td>[% enforcement.users_who_can_edit | html %]</td>
+                </tr>
+                <tr>
+                    <th>Allowed Users:</th>
+                    <td>[% enforcement.allowed_users | html %]</td>
+                </tr>
+                <tr>
+                    <th>Allowed PRs:</th>
+                    <td>[% enforcement.allowed_prs | html %]</td>
+                </tr>
+                <tr>
+                    <td colspan=2>
+                        <div id="enforcement-controls">
+                            <table>
+                                <tr>
+                                    [% IF enforcement.can_edit %]
+                                    <td class="active">
+                                        <a href="[%
+                                            c.uri_for('/edit_enforcement') _
+                                            '?id=' _
+                                            enforcement.id _
+                                            '&from_lock_id=' _
+                                            lock.id
+                                        %]">Edit</a>
+                                    [% ELSE %]
+                                    <td class="inactive">
+                                        <p>Edit</p>
+                                    [% END %]
+                                    <!--/td>
+                                    [% IF enforcement.can_enable %]
+                                    <td class="active">
+                                        <a href="">[% enforcement.toggle_string %]</a>
+                                    [% ELSE %]
+                                    <td class="inactive">
+                                        <p>[% enforcement.toggle_string %]</p>
+                                    [% END %]
+                                    </td-->
+                                </tr>
+                            </table>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <br/>
+        [% END %]
+    </div>
+</div>

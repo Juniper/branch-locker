@@ -1,0 +1,54 @@
+[%#
+
+Copyright (c) 2016, Juniper Networks Inc.
+All rights reserved.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+
+%]
+
+[% META title = 'Welcome to Branch Locker' %]
+<div class="quick-links">
+    <h1>Branch Status</h1>
+    [% FOREACH link IN release_types %]
+        <a href="#[% link | html %]">[% link | html%]</a>
+    [% END %]
+</div>
+<div class="grid-table">
+    <table>
+    [% FOREACH table IN tables %]
+        <tr><td colspan=3>
+            <div class="label-table"><a id="[% table.label | html %]">[% table.label | html %]</a></div>
+        </td></tr>
+        <tr>
+            <th>Branch Name</th>
+            <th>Status</th>
+            <th>Request commit access from gatekeepers</th>
+        </tr>
+        [% FOREACH lock IN table.locks %]
+            [% IF loop.index % 2 %]
+        <tr class="even-row">
+            [% ELSE %]
+        <tr class="odd-row">
+            [% END %]
+            <td><a href="[%
+                c.uri_for('/lock') _ "?id=$lock.id"
+            %]">[% lock.name | html %]</a>
+            </td>
+            <td>[% lock.status | html %]</td>
+            <td><a href="[% lock.email_gate_keepers | html %]">[% lock.gate_keepers | html %]</a></td>
+        </tr>
+        [% END %]
+    [% END %]
+    </table>
+</div>

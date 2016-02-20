@@ -1,0 +1,41 @@
+[%#
+
+Copyright (c) 2016, Juniper Networks Inc.
+All rights reserved.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+
+%]
+[% site.rgb = {
+     black    = '#000000'
+     white    = '#ffffff'
+     grey1    = '#46494c'
+     grey2    = '#c6c9cc'
+     grey3    = '#e3e6ea'
+     red      = '#CC4444'
+     green    = '#66AA66'
+     blue     = '#89b8df'
+     orange   = '#f08900'
+   };
+
+   site.col = {
+      page              = site.rgb.white
+      text              = site.rgb.black
+      head              = site.rgb.grey3
+      message           = site.rgb.green
+      error             = site.rgb.red
+      line              = '#0066ff'
+      controlBGActive   = '#50A0E0'
+      controlBGInactive = '#D0D0D0'
+   };
+-%]

@@ -1,0 +1,54 @@
+
+Copyright (c) 2016, Juniper Networks Inc.
+All rights reserved.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+
+Add a comma separated list of PRs to the lock that has the id 132.
+$ edit-locks -l 132 -u username --add-prs ',1 ,,2 ,'
+
+Remove a comma separated list of PRs from the lock that has the id 132.
+$ edit-locks -l 132 -u username --remove-prs '12345,'
+
+Add a comma separated list of users to the lock that has the id 132.
+$ edit-locks -l 132 -u username --add-users 'username, username2'
+
+Remove a comma separated list of users from the lock that has the id 132.
+$ edit-locks -l 132 -u username --remove-users 'username ,username2,'
+
+Add a comma separated list of gate keepers to the lock that has the id 132.
+$ edit-locks -l 132 -u username --add-gate-keepers 'username, username2'
+
+Remove a comma separated list of gate keepers from the lock that has the id
+132.
+$ edit-locks -l 132 -u username --remove-gate-keepers 'username ,username2,'
+
+Replace the message of the lock that has the id 132.
+$ edit-locks -l 132 -u username --replace-message 'Some Important Message...'
+
+Set the state of the lock that has the id 132.
+$ edit-locks -l 132 -u username --set-state 'eol'
+
+Set the lock status of the lock that has the id 132.
+$ edit-locks -l 132 -u username --set-status 'closed'
+
+Example of a mix of options:
+$ edit-locks -b trunk -u username --remove-prs ',1 ,,2 ,' \
+    --remove-users 'username2' \
+    --add-users 'username3' \
+    --add-prs '12345' \
+    --add-gate-keepers 'username4, username5,' \
+    --remove-gate-keepers 'username6' \
+    --set-state 'active' \
+    --set-status 'restricted' \
+    --replace-message 'Some Message...'

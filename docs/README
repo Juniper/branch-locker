@@ -1,0 +1,110 @@
+=License=
+
+Copyright (c) 2016, Juniper Networks Inc.
+All rights reserved.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+
+=Overview=
+The main purpose of Branchlocker is to restrict commit access to a list of
+users and/or PRs.
+
+Branchlocker Rewrite is an attempt to add functionality to the Branchlocker
+tool, while reducing complexity, and supplying an API.
+
+=Directory Structure=
+The directory structure is broken up into the following areas:
+* docs
+* sql 
+* src
+
+==docs==
+Holds all human readable written documentation that is not in line comments.
+
+==sql==
+Holds all files used in creating the PostgreSQL database and test data.
+
+==src==
+Holds the API, Command Line Interface (CLI) sources, and tests for both the
+API and CLI.
+
+=Server Setup=
+The Branch Locker server was initialy developed and tested on a VM running
+CentOS 6.4.
+
+==Installing Required Software==
+As root:
+    * Update yum: $ yum update -y
+    * Install Development Tools:
+      $ yum groupinstall -y "Development Tools"
+
+    * Install Postgres 8.4:
+      $ yum install -y postgresql postgresql-devel postgresql-server
+
+    * Setup Postgres:
+      $ service postgresql initdb
+
+    * Create postgres user
+      $ useradd postgres -M -d /var/lib/pgsql -g postgres
+      $ chown -R postgres /var/lib/pgsql
+
+    * Start postgresql service
+      $ service postgresql start
+
+    * Checkout Server Code
+      $ mkdir /path/to/code
+      $ cd /path/to/code
+      $ git clone https://github.com/sumason2/branch-locker.git
+
+    * Install CPAN
+      $ yum install -y perl-CPAN
+
+    * Tell CPAN to install all dependencies.
+      $ perl -MCPAN -e 'my $c = "CPAN::HandleConfig"; $c->load(doit => 1, autoconfig => 1); $c->edit(prerequisites_policy => "follow"); $c->edit(build_requires_install_policy => "yes"); $c->commit'
+
+    * Update CPAN
+      $ perl -MCPAN -e 'install CPAN'
+
+    * Install Catalyst - These can take hours.
+      $ perl -MCPAN -e 'install Catalyst'
+      $ perl -MCPAN -e 'install Catalyst::Devel'
+
+    * Compile and Test Code
+      $ cd /path/to/code/web/BranchLocker
+      $ perl Makefile.PL
+      $ make
+      $ make test
+
+    * To Run Development server on port 3000
+      $ /path/to/code/web/BranchLocker/script/branchlocker_server.pl
+
+    * To Run Development server on another port
+      $ /path/to/code/web/BranchLocker/script/branchlocker_server.pl -p 3030
+
+    * Run Development server with test configuration
+      $ BRANCHLOCKER_CONFIG_LOCAL_SUFFIX="test" \
+      /path/to/code/web/BranchLocker/script/branchlocker_server.pl
+
+    * Install EPEL yum repository - for mod_fcgid
+      $ rpm -ivh http://dl.fedoraproject.org/pub/epel/6/i386/epel-release-6-8.noarch.rpm
+      # Uncomment baseurl lines and comment mirrorlist lines in epel.repo
+
+    * Deploy with Apache and Fast CGI
+      $ yum install -y httpd httpd-devel mod_fcgid mod_ssl
+
+    * Install Apache configurations.
+      $ cp /path/to/code/web/apache-conf/*.conf /etc/httpd/conf.d/.
+
+=Source Control=
+The sources for Branch Locker are stored on GitHub at:
+https://github.com/sumason2/branch-locker
