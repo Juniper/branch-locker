@@ -2335,6 +2335,24 @@ sub parse_data_link_pr_to_enforcement_is_allowed($)
     return parse_data_from_audit_event($raw_data, 3);
 }
 
+sub parse_data_link_user_to_enforcement_is_allowed($)
+{
+    my $raw_data = shift;
+    return parse_data_from_audit_event($raw_data, 3);
+}
+
+sub parse_data_link_user_to_enforcement_can_enable($)
+{
+    my $raw_data = shift;
+    return parse_data_from_audit_event($raw_data, 3);
+}
+
+sub parse_data_link_user_to_enforcement_can_edit($)
+{
+    my $raw_data = shift;
+    return parse_data_from_audit_event($raw_data, 3);
+}
+
 sub parse_lock_data_from_audit_event($)
 {
     my $raw_data = shift;
@@ -2411,6 +2429,249 @@ sub bl_link_pr_to_enforcement_is_allowed_delete_print_sub($)
         my $name            = $enforcement_ref->{'name'};
 
         $result = "Removed PR $pr_number from enforcement: '$name'.";
+    }
+
+    return $result;
+}
+
+sub bl_link_user_to_enforcement_is_allowed_insert_print_sub($)
+{
+    my $audit_event = shift;
+    my ($link_id, $user_id, $enforcement_id)
+        = parse_data_link_user_to_enforcement_is_allowed(
+            $audit_event->{'new_data'}
+    );
+
+    my $result = '[Error]: Unrecognized link_user_to_enforcement_insert format';
+    if (defined $link_id) {
+        my $user_ref = get_user_from_id($user_id);
+        my @enforcements = @{ get_enforcements({
+            'id' => $enforcement_id
+        }) };
+
+        my $enforcement_ref = $enforcements[0];
+        my $name            = $enforcement_ref->{'name'};
+        my $username        = $user_ref->{'name'};
+
+        $result = <<MESSAGE;
+Added user '$username' to allowed users on enforcement: '$name'.
+MESSAGE
+    }
+
+    return $result;
+}
+
+sub bl_link_user_to_enforcement_is_allowed_update_print_sub($)
+{
+    my $audit_event = shift;
+    my ($link_id, $user_id, $enforcement_id)
+        = parse_data_link_user_to_enforcement_is_allowed(
+            $audit_event->{'new_data'}
+    );
+
+    my $result = '[Error]: Unrecognized link_user_to_enforcement_update format';
+    if (defined $link_id) {
+        my $user_ref = get_user_from_id($user_id);
+        my @enforcements = @{ get_enforcements({
+            'id' => $enforcement_id
+        }) };
+
+        my $enforcement_ref = $enforcements[0];
+        my $name            = $enforcement_ref->{'name'};
+        my $username        = $user_ref->{'name'};
+
+        $result = <<MESSAGE;
+Added user '$username' to allowed users on enforcement: '$name'.
+MESSAGE
+    }
+
+    return $result;
+}
+
+sub bl_link_user_to_enforcement_is_allowed_delete_print_sub($)
+{
+    my $audit_event = shift;
+    my ($link_id, $user_id, $enforcement_id)
+        = parse_data_link_user_to_enforcement_is_allowed(
+            $audit_event->{'old_data'}
+    );
+
+    my $result = '[Error]: Unrecognized link_user_to_enforcement_delete format';
+    if (defined $link_id) {
+        my $user_ref = get_user_from_id($user_id);
+        my @enforcements = @{ get_enforcements({
+            'id' => $enforcement_id
+        }) };
+
+        my $enforcement_ref = $enforcements[0];
+        my $name            = $enforcement_ref->{'name'};
+        my $username        = $user_ref->{'name'};
+
+        $result = <<MESSAGE;
+Removed user '$username' from allowed users on enforcement: '$name'.
+MESSAGE
+    }
+
+    return $result;
+}
+
+sub bl_link_user_to_enforcement_can_enable_insert_print_sub($)
+{
+    my $audit_event = shift;
+    my ($link_id, $user_id, $enforcement_id)
+        = parse_data_link_user_to_enforcement_can_enable(
+            $audit_event->{'new_data'}
+    );
+
+    my $result = '[Error]: Unrecognized can_enable_enforcement_insert format';
+    if (defined $link_id) {
+        my $user_ref = get_user_from_id($user_id);
+        my @enforcements = @{ get_enforcements({
+            'id' => $enforcement_id
+        }) };
+
+        my $enforcement_ref = $enforcements[0];
+        my $name            = $enforcement_ref->{'name'};
+        my $username        = $user_ref->{'name'};
+
+        $result = <<MESSAGE;
+User '$username' can now enable enforcement: '$name'.
+MESSAGE
+    }
+
+    return $result;
+}
+
+sub bl_link_user_to_enforcement_can_enable_update_print_sub($)
+{
+    my $audit_event = shift;
+    my ($link_id, $user_id, $enforcement_id)
+        = parse_data_link_user_to_enforcement_can_enable(
+            $audit_event->{'new_data'}
+    );
+
+    my $result = '[Error]: Unrecognized can_enable_enforcement_update format';
+    if (defined $link_id) {
+        my $user_ref = get_user_from_id($user_id);
+        my @enforcements = @{ get_enforcements({
+            'id' => $enforcement_id
+        }) };
+
+        my $enforcement_ref = $enforcements[0];
+        my $name            = $enforcement_ref->{'name'};
+        my $username        = $user_ref->{'name'};
+
+        $result = <<MESSAGE;
+User '$username' can now enable enforcement: '$name'.
+MESSAGE
+    }
+
+    return $result;
+}
+
+sub bl_link_user_to_enforcement_can_enable_delete_print_sub($)
+{
+    my $audit_event = shift;
+    my ($link_id, $user_id, $enforcement_id)
+        = parse_data_link_user_to_enforcement_can_enable(
+            $audit_event->{'old_data'}
+    );
+
+    my $result = '[Error]: Unrecognized can_enable_enforcement_delete format';
+    if (defined $link_id) {
+        my $user_ref = get_user_from_id($user_id);
+        my @enforcements = @{ get_enforcements({
+            'id' => $enforcement_id
+        }) };
+
+        my $enforcement_ref = $enforcements[0];
+        my $name            = $enforcement_ref->{'name'};
+        my $username        = $user_ref->{'name'};
+
+        $result = <<MESSAGE;
+User '$username' can no longer enable enforcement: '$name'.
+MESSAGE
+    }
+
+    return $result;
+}
+
+sub bl_link_user_to_enforcement_can_edit_insert_print_sub($)
+{
+    my $audit_event = shift;
+    my ($link_id, $user_id, $enforcement_id)
+        = parse_data_link_user_to_enforcement_can_edit(
+            $audit_event->{'new_data'}
+    );
+
+    my $result = '[Error]: Unrecognized can_edit_enforcement_insert format';
+    if (defined $link_id) {
+        my $user_ref = get_user_from_id($user_id);
+        my @enforcements = @{ get_enforcements({
+            'id' => $enforcement_id
+        }) };
+
+        my $enforcement_ref = $enforcements[0];
+        my $name            = $enforcement_ref->{'name'};
+        my $username        = $user_ref->{'name'};
+
+        $result = <<MESSAGE;
+User '$username' can now edit enforcement: '$name'.
+MESSAGE
+    }
+
+    return $result;
+}
+
+sub bl_link_user_to_enforcement_can_edit_update_print_sub($)
+{
+    my $audit_event = shift;
+    my ($link_id, $user_id, $enforcement_id)
+        = parse_data_link_user_to_enforcement_can_edit(
+            $audit_event->{'new_data'}
+    );
+
+    my $result = '[Error]: Unrecognized can_edit_enforcement_update format';
+    if (defined $link_id) {
+        my $user_ref = get_user_from_id($user_id);
+        my @enforcements = @{ get_enforcements({
+            'id' => $enforcement_id
+        }) };
+
+        my $enforcement_ref = $enforcements[0];
+        my $name            = $enforcement_ref->{'name'};
+        my $username        = $user_ref->{'name'};
+
+        $result = <<MESSAGE;
+User '$username' can now edit enforcement: '$name'.
+MESSAGE
+    }
+
+    return $result;
+}
+
+sub bl_link_user_to_enforcement_can_edit_delete_print_sub($)
+{
+    my $audit_event = shift;
+    my ($link_id, $user_id, $enforcement_id)
+        = parse_data_link_user_to_enforcement_can_edit(
+            $audit_event->{'old_data'}
+    );
+
+    my $result = '[Error]: Unrecognized can_edit_enforcement_delete format';
+    if (defined $link_id) {
+        my $user_ref = get_user_from_id($user_id);
+        my @enforcements = @{ get_enforcements({
+            'id' => $enforcement_id
+        }) };
+
+        my $enforcement_ref = $enforcements[0];
+        my $name            = $enforcement_ref->{'name'};
+        my $username        = $user_ref->{'name'};
+
+        $result = <<MESSAGE;
+User '$username' can no longer edit enforcement: '$name'.
+MESSAGE
     }
 
     return $result;
@@ -2700,6 +2961,36 @@ sub get_audit_trail_enforcements($)
         \&bl_link_pr_to_enforcement_is_allowed_insert_print_sub,
         \&bl_link_pr_to_enforcement_is_allowed_update_print_sub,
         \&bl_link_pr_to_enforcement_is_allowed_delete_print_sub,
+    );
+
+    combine_audit_trail_events($audit_trail, $audit_events);
+
+    $audit_events = pull_audit_events(
+        'bl_link_user_to_enforcement_is_allowed',
+        $regex,
+        \&bl_link_user_to_enforcement_is_allowed_insert_print_sub,
+        \&bl_link_user_to_enforcement_is_allowed_update_print_sub,
+        \&bl_link_user_to_enforcement_is_allowed_delete_print_sub,
+    );
+
+    combine_audit_trail_events($audit_trail, $audit_events);
+
+    $audit_events = pull_audit_events(
+        'bl_link_user_to_enforcement_can_enable',
+        $regex,
+        \&bl_link_user_to_enforcement_can_enable_insert_print_sub,
+        \&bl_link_user_to_enforcement_can_enable_update_print_sub,
+        \&bl_link_user_to_enforcement_can_enable_delete_print_sub,
+    );
+
+    combine_audit_trail_events($audit_trail, $audit_events);
+
+    $audit_events = pull_audit_events(
+        'bl_link_user_to_enforcement_can_edit',
+        $regex,
+        \&bl_link_user_to_enforcement_can_edit_insert_print_sub,
+        \&bl_link_user_to_enforcement_can_edit_update_print_sub,
+        \&bl_link_user_to_enforcement_can_edit_delete_print_sub,
     );
 
     combine_audit_trail_events($audit_trail, $audit_events);

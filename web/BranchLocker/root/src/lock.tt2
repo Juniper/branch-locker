@@ -171,7 +171,7 @@ limitations under the License.
         <div class="audit-trail-data">
             <div class="view-audit-trail">
                 <table>
-                    <tr><td>Java script not enabled.  Click <a href="[% link_to_audit_trail %]">here</a> to view audit trail.</td></tr>
+                    <tr><td>Click <a href="[% link_to_audit_trail %]">here</a> to view audit trail.</td></tr>
                 </table>
             </div>
         </div>
