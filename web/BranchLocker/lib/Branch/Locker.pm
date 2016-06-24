@@ -2314,6 +2314,414 @@ sub edit_enforcements_handle_is_enabled_key($$$)
 {
 }
 
+sub parse_data_from_audit_event($$)
+{
+    my $raw_data        = shift;
+    my $expected_values = shift;
+
+    my @values = ();
+    if ($raw_data =~ /\((.*)\)/) {
+        @values = split(',', $1);
+    }
+
+    return (scalar @values == $expected_values) ? @values : undef;
+}
+
+# The parse X data from audit event subroutines are separated so if the
+# columns in the tables change we can support multiple audit formats here.
+sub parse_data_link_pr_to_enforcement_is_allowed($)
+{
+    my $raw_data = shift;
+    return parse_data_from_audit_event($raw_data, 3);
+}
+
+sub parse_lock_data_from_audit_event($)
+{
+    my $raw_data = shift;
+    return parse_data_from_audit_event($raw_data, 9);
+}
+
+sub parse_enforcement_data_from_audit_event($)
+{
+    my $raw_data = shift;
+    return parse_data_from_audit_event($raw_data, 3);
+}
+
+sub bl_link_pr_to_enforcement_is_allowed_insert_print_sub($)
+{
+    my $audit_event = shift;
+    my ($link_id, $pr_number, $enforcement_id)
+        = parse_data_link_pr_to_enforcement_is_allowed(
+            $audit_event->{'new_data'}
+    );
+
+    my $result = '[Error]: Unrecognized link_pr_to_enforcement_insert format';
+    if (defined $link_id) {
+        my @enforcements = @{ get_enforcements({
+            'id' => $enforcement_id
+        }) };
+
+        my $enforcement_ref = $enforcements[0];
+        my $name            = $enforcement_ref->{'name'};
+
+        $result = "Added PR $pr_number to enforcement: '$name'.";
+    }
+
+    return $result;
+}
+
+sub bl_link_pr_to_enforcement_is_allowed_update_print_sub($)
+{
+    my $audit_event = shift;
+    my ($link_id, $pr_number, $enforcement_id)
+        = parse_data_link_pr_to_enforcement_is_allowed(
+            $audit_event->{'new_data'}
+    );
+
+    my $result = '[Error]: Unrecognized link_pr_to_enforcement_update format';
+    if (defined $link_id) {
+        my @enforcements = @{ get_enforcements({
+            'id' => $enforcement_id
+        }) };
+
+        my $enforcement_ref = $enforcements[0];
+        my $name            = $enforcement_ref->{'name'};
+
+        $result = "Changed PR $pr_number on enforcement: '$name'.";
+    }
+
+    return $result;
+}
+
+sub bl_link_pr_to_enforcement_is_allowed_delete_print_sub($)
+{
+    my $audit_event = shift;
+    my ($link_id, $pr_number, $enforcement_id)
+        = parse_data_link_pr_to_enforcement_is_allowed(
+            $audit_event->{'old_data'}
+    );
+
+    my $result = '[Error]: Unrecognized link_pr_to_enforcement_delete format';
+    if (defined $link_id) {
+        my @enforcements = @{ get_enforcements({
+            'id' => $enforcement_id
+        }) };
+
+        my $enforcement_ref = $enforcements[0];
+        my $name            = $enforcement_ref->{'name'};
+
+        $result = "Removed PR $pr_number from enforcement: '$name'.";
+    }
+
+    return $result;
+}
+
+sub bl_lock_insert_print_sub($)
+{
+    my $audit_event = shift;
+
+    my ($id,
+        $name,
+        $message,
+        $is_active,
+        $is_open,
+        $old_lock,
+        $old_release,
+        $grouped,
+        $is_closed,
+    ) = parse_lock_data_from_audit_event($audit_event->{'new_data'});
+
+    my $result = '[Error]: Unrecognized lock_insert_print format';
+    if (defined $id) {
+        $result = <<MESSAGE;
+Created lock '$name' with the following message:
+$message
+MESSAGE
+    }
+
+    return $result;
+}
+
+sub bl_lock_update_print_sub($)
+{
+    my $audit_event = shift;
+
+    my ($id,
+        $name,
+        $message,
+        $is_active,
+        $is_open,
+        $old_lock,
+        $old_release,
+        $grouped,
+        $is_closed,
+    ) = parse_lock_data_from_audit_event($audit_event->{'new_data'});
+
+    my $result = '[Error]: Unrecognized lock_update_print format';
+    if (defined $id) {
+        $result = <<MESSAGE;
+Changed lock '$name' with the following message:
+$message
+MESSAGE
+    }
+
+    return $result;
+}
+
+sub bl_lock_delete_print_sub($)
+{
+    my $audit_event = shift;
+
+    my ($id,
+        $name,
+        $message,
+        $is_active,
+        $is_open,
+        $old_lock,
+        $old_release,
+        $grouped,
+        $is_closed,
+    ) = parse_lock_data_from_audit_event($audit_event->{'old_data'});
+
+    my $result = '[Error]: Unrecognized lock_delete_print format';
+    if (defined $id) {
+        $result = "Deleted lock '$name'.";
+    }
+
+    return $result;
+}
+
+sub bl_enforcement_insert_print_sub($)
+{
+    my $audit_event = shift;
+
+    my ($id,
+        $name,
+        $is_enabled,
+    ) = parse_enforcement_data_from_audit_event($audit_event->{'new_data'});
+
+    my $result = '[Error]: Unrecognized enforcement_insert_print format';
+    if (defined $id) {
+        $name =~ s/(^"|"$)//g;
+        $result = "Created enforcement '$name'.";
+    }
+
+    return $result;
+}
+
+sub bl_enforcement_update_print_sub($)
+{
+    my $audit_event = shift;
+
+    my ($id,
+        $name,
+        $is_enabled,
+    ) = parse_enforcement_data_from_audit_event($audit_event->{'new_data'});
+
+    my $result = '[Error]: Unrecognized enforcement_update_print format';
+    if (defined $id) {
+        $name =~ s/(^"|"$)//g;
+        $result = "Changed enforcement '$name'.";
+    }
+
+    return $result;
+}
+
+sub bl_enforcement_delete_print_sub($)
+{
+    my $audit_event = shift;
+
+    my ($id,
+        $name,
+        $is_enabled,
+    ) = parse_enforcement_data_from_audit_event($audit_event->{'new_data'});
+
+    my $result = '[Error]: Unrecognized enforcement_delete_print format';
+    if (defined $id) {
+        $name =~ s/(^"|"$)//g;
+        $result = "Deleted enforcement '$name'.";
+    }
+
+    return $result;
+}
+
+my $get_audit_trail_dispatch_table = {
+    'lock'        => \&get_audit_trail_locks,
+    'enforcement' => \&get_audit_trail_enforcements,
+    $UNKNOWN_KEY  => \&get_audit_trail_unknown_object,
+};
+
+sub pull_audit_events($$$$$)
+{
+    my $table_name       = shift;
+    my $regex            = shift;
+    my $insert_print_sub = shift;
+    my $update_print_sub = shift;
+    my $delete_print_sub = shift;
+
+    my $sql = <<SQL;
+SELECT *
+FROM   $schema_name.view_audit_trail
+WHERE  table_name = '$table_name'
+    AND ( new_data similar to E'$regex'
+          OR  old_data similar to E'$regex'
+    )
+SQL
+
+    my $audit_events = DBWrap::sql_returning_rows({
+        'database' => $database_name,
+        'sql'      => $sql,
+    });
+
+    my $audit_transactions = {};
+    foreach my $audit_event (@$audit_events) {
+        my $audit_transaction_id = $audit_event->{'audit_transaction_id'};
+        my $username             = $audit_event->{'username'            };
+        my $on_behalf_of         = $audit_event->{'on_behalf_of'        };
+        my $date                 = $audit_event->{'end_timestamp'       };
+        my $action               = $audit_event->{'action'              };
+        my $new_data             = $audit_event->{'new_data'            };
+        my $old_data             = $audit_event->{'old_data'            };
+
+        my $transaction_details
+            = $audit_transactions->{$audit_transaction_id};
+
+        if (! defined $transaction_details) {
+            $transaction_details = {
+                'username'     => $username,
+                'on_behalf_of' => $on_behalf_of,
+                'date'         => $date,
+                'actions'      => [],
+            };
+        }
+        elsif ($transaction_details->{'date'} lt $date) {
+            $transaction_details->{'date'} = $date;
+        }
+
+        my $actions_ref = $transaction_details->{'actions'};
+
+        # Print messages nicely.
+        if ($action eq 'INSERT') {
+            push(@$actions_ref, &$insert_print_sub($audit_event));
+        }
+        elsif ($action eq 'UPDATE') {
+            push(@$actions_ref, &$update_print_sub($audit_event));
+        }
+        elsif ($action eq 'DELETE') {
+            push(@$actions_ref, &$delete_print_sub($audit_event));
+        }
+
+        $audit_transactions->{$audit_transaction_id} = $transaction_details;
+    }
+
+    return $audit_transactions;
+}
+
+sub combine_audit_trail_events($$)
+{
+    my $audit_trail_ref = shift;
+    my $partial_trail_ref = shift;
+
+    foreach my $audit_transaction_id (keys %$partial_trail_ref) {
+        my $audit_event = $audit_trail_ref->{$audit_transaction_id};
+        my $partial_event = $partial_trail_ref->{$audit_transaction_id};
+
+        if (! defined $audit_event) {
+            $audit_trail_ref->{$audit_transaction_id}
+                = $partial_trail_ref->{$audit_transaction_id};
+        }
+        else {
+            my $audit_event_actions   = $audit_event->{'actions'} || [];
+            my $partial_event_actions = $partial_event->{'actions'} || [];
+            push(@$audit_event_actions, @$partial_event_actions);
+            $audit_event->{'actions'} = $audit_event_actions;
+        }
+    }
+}
+
+sub get_audit_trail_locks($)
+{
+    my $inputs_ref = shift;
+
+    my $lock_ids_ref = get_array_ref_from_ref($inputs_ref, 'id');
+    my $locks_ref    = get_locks({ 'lock_id' => $inputs_ref });
+
+    my $ids_string = join('|', @$lock_ids_ref);
+    my $audit_trail = {};
+
+    my $regex = "\\\\(($ids_string),%";
+
+    my $audit_events = pull_audit_events(
+        'bl_lock',
+        $regex,
+        \&bl_lock_insert_print_sub,
+        \&bl_lock_update_print_sub,
+        \&bl_lock_delete_print_sub,
+    );
+
+    combine_audit_trail_events($audit_trail, $audit_events);
+
+    foreach my $lock_ref (@$locks_ref) {
+        my $enforcements_ref = get_enforcements_from_lock($lock_ref);
+        $audit_events = get_audit_trail_enforcements($enforcements_ref);
+
+        combine_audit_trail_events($audit_trail, $audit_events);
+    }
+
+    return $audit_trail;
+}
+
+sub get_audit_trail_enforcements($)
+{
+    my $inputs_ref = shift;
+
+    my $enforcement_ids_ref = get_array_ref_from_ref($inputs_ref, 'id');
+    my $enforcements_ref
+        = get_enforcements({ 'id' => $enforcement_ids_ref });
+
+    my $ids_string = join('|', @$enforcement_ids_ref);
+    my $audit_trail = {};
+
+    my $regex = "\\\\(($ids_string),%";
+    my $audit_events = pull_audit_events(
+        'bl_enforcement',
+        $regex,
+        \&bl_enforcement_insert_print_sub,
+        \&bl_enforcement_update_print_sub,
+        \&bl_enforcement_delete_print_sub,
+    );
+
+    combine_audit_trail_events($audit_trail, $audit_events);
+
+    $regex = "%,($ids_string)\\\\)";
+    $audit_events = pull_audit_events(
+        'bl_link_pr_to_enforcement_is_allowed',
+        $regex,
+        \&bl_link_pr_to_enforcement_is_allowed_insert_print_sub,
+        \&bl_link_pr_to_enforcement_is_allowed_update_print_sub,
+        \&bl_link_pr_to_enforcement_is_allowed_delete_print_sub,
+    );
+
+    combine_audit_trail_events($audit_trail, $audit_events);
+
+    return $audit_trail;
+}
+
+sub get_audit_trail_unknown_object($)
+{
+    return [];
+}
+
+sub get_audit_trail($$) {
+    my $object_type = shift;
+    my $object_id   = shift;
+
+    my $subroutine_ref = $get_audit_trail_dispatch_table->{$object_type} ||
+        $get_audit_trail_dispatch_table->{$UNKNOWN_KEY};
+
+    return &$subroutine_ref($object_id);
+}
+
 =back
 
 =cut

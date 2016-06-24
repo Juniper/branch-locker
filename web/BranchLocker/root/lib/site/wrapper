@@ -17,11 +17,16 @@ limitations under the License.
 
 %]
 
-[% IF template.name.match('\.(css|js|txt)');
-     debug("Passing page through as text: $template.name");
-     content;
-   ELSE;
-     debug("Applying HTML page layout wrappers to $template.name\n");
-     content WRAPPER site/html + site/layout;
-   END;
+[% IF no_wrapper;
+        debug("Passing page through as text: $template.name");
+        content;
+    ELSE;
+        IF template.name.match('\.(css|js|txt)');
+            debug("Passing page through as text: $template.name");
+            content;
+        ELSE;
+            debug("Applying HTML page layout wrappers to $template.name\n");
+            content WRAPPER site/html + site/layout;
+        END;
+    END;
 -%]

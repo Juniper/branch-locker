@@ -343,3 +343,47 @@ div.broadcasts {
     color: #999900;
     margin: 0px 0px 10px 0px;
 }
+
+div.audit-trail {
+    padding-left: 15px;
+}
+
+.view-audit-trail table {
+    font-size: 12px;
+    border-style: solid;
+    border-width: 1px;
+    border-collapse: collapse;
+    margin: auto;
+    width: 100%;
+}
+
+.view-audit-trail th {
+    padding: 5px;
+    text-align: right;
+    width: 130px;
+}
+
+.view-audit-trail tr {
+    font-size: 1.1em;
+    text-align: left;
+}
+
+.view-audit-trail td {
+    padding: 5px;
+}
+
+.eat-transaction td {
+    background-color: #e8e8e8;
+}
+
+td.eat-action {
+    background-color: #e0e0e0;
+}
+
+.oat-transaction td {
+    background-color: #ffffff;
+}
+
+td.oat-action {
+    background-color: #f8f8f8;
+}

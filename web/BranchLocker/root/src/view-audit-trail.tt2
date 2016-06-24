@@ -1,0 +1,48 @@
+[%#
+
+Copyright (c) 2016, Juniper Networks Inc.
+All rights reserved.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+
+%]
+
+<div class="view-audit-trail">
+    [% IF audit_trail.size > 0 %]
+    <table>
+        [% FOREACH record IN audit_trail;
+               IF loop.index % 2;
+                   row_class = "eat-transaction";
+               ELSE;
+                   row_class = "oat-transaction";
+               END;
+        -%]
+        <tr class="[% row_class %]">
+            <td colspan=2>[% record.username | html %] modified [% object_type %] on behalf of [% record.on_behalf_of | html %] on:</td><td>[% record.date | html %]</td>
+        </tr>
+            [% FOREACH action IN record.actions;
+                   IF loop.index % 2;
+                       action_class = "eat-action";
+                   ELSE;
+                       action_class = "oat-action";
+                   END;
+            -%]
+        <tr class="[% row_class %]"><td></td>
+            <td class="[% action_class %]">[% action | html %]</td>
+            <td></td>
+        </tr>
+            [% END %]
+        [% END %]
+    </table>
+    [% END %]
+</div>

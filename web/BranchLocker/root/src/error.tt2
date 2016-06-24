@@ -17,7 +17,7 @@ limitations under the License.
 
 %]
 
-[% META title = 'Catalyst/TT Error' %]
+[% META title = 'Branch Locker Error' %]
 <p>
-  We have encountered the following error:<span class="error">[% error %]</span>
+  We have encountered the following error: <span class="error">[% error %]</span>
 </p>

@@ -142,7 +142,8 @@ sub legacy_lock_PUT {
 
     # Create a lock if no locks were found.
     if (! scalar @$locks_ref) {
-        my $branchname = $criteria_ref->{'branch'};
+        my $branchname = $criteria_ref->{'branch'    };
+        my $repository = $criteria_ref->{'repository'} || 'example-repository';
         if ($auto_create_lock
             && defined $branchname
             && $branchname ne q{}) {
@@ -184,7 +185,7 @@ sub legacy_lock_PUT {
 
             my $location_ref = Branch::Locker::find_or_create_location_from_path_and_repository(
                 $path,
-                'example-repository'
+                $repository
             );
 
             Branch::Locker::link_location_to_lock($location_ref, $lock_ref);

@@ -17,9 +17,9 @@
 {
     # These are in addition to the values loaded from branchlocker.pl, also
     # values here override the values in branchlocker.pl when loaded.
-    'word'       => 'Test',
+    'word'       => 'Offline Mode',
     'broadcasts' => [
-        'This is the test instance of Branch Locker.',
+        'This is the offline instance of Branch Locker.',
     ],
 
     # Read only settings, exceptions check for existence of key and not
