@@ -1040,6 +1040,18 @@ sub get_user_from_name($)
     });
 }
 
+sub get_user_from_id($)
+{
+    my $id = shift;
+
+    return DBWrap::get_row_from_columns({
+        'database' => $database_name,
+        'schema'   => $schema_name,
+        'table'    => 'bl_user',
+        'columns'  => { 'id' => $id },
+    });
+}
+
 sub is_user_an_admin($)
 {
     my $check_ref = shift;
