@@ -20,6 +20,8 @@ limitations under the License.
 <div id="header">[% PROCESS site/header %]</div>
 
 <div id="content">
+[% PROCESS site/bread_crumbs %]
+
 [% IF c.config.broadcasts.defined %]
 <div class="broadcasts">
     <ul>

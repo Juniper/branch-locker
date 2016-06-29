@@ -109,11 +109,20 @@ sub edit_enforcement :Global {
                    : 'disabled'
                    ;
 
+    my $from_lock_id = $parameters->{'from_lock_id'} || $EMPTY_STR;
+    my $bread_crumbs = [
+        {
+            'link' => $c->uri_for('/lock') . "?id=$from_lock_id",
+            'name' => 'Back',
+        },
+    ];
+
+    $c->stash->{'bread_crumbs'} = $bread_crumbs;
     $c->stash->{'can_edit'    } = $can_edit;
     $c->stash->{'can_enable'  } = $can_enable;
     $c->stash->{'admin_only'  } = $admin_only;
     $c->stash->{'can_submit'  } = $can_submit;
-    $c->stash->{'from_lock_id'} = $parameters->{'from_lock_id'};
+    $c->stash->{'from_lock_id'} = $from_lock_id;
     $c->stash->{'enforcement' } = $enforcement;
     $c->stash->{'template'    } = 'edit-enforcement.tt2';
 }

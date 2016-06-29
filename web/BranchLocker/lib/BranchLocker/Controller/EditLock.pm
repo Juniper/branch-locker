@@ -106,12 +106,18 @@ sub edit_lock :Global {
                    : 'disabled'
                    ;
 
+    my $id = $parameters->{'id'};
+    my $bread_crumbs = [
+        { 'link' => $c->uri_for('/lock') . "?id=$id", 'name' => 'Back' },
+    ];
+
+    $c->stash->{'bread_crumbs'} = $bread_crumbs;
     $c->stash->{'can_edit'    } = $can_edit;
     $c->stash->{'can_enable'  } = $can_enable;
     $c->stash->{'admin_only'  } = $admin_only;
     $c->stash->{'can_submit'  } = $can_submit;
     $c->stash->{'lock'        } = $lock_ref;
-    $c->stash->{'id'          } = $parameters->{'id'};
+    $c->stash->{'id'          } = $id;
     $c->stash->{'template'    } = 'edit-lock.tt2';
 }
 

@@ -18,10 +18,6 @@ limitations under the License.
 %]
 
 [% META title = 'Welcome to Branch Locker' %]
-<div class="bread-crumbs">
-    <a href="[% c.uri_for('/lock') _ '?id=' _ id %]">Back</a>
-</div>
-
 <div class="lock-data">
     <h1>[% lock.name | html%]</h1>
     <div class="view-lock">

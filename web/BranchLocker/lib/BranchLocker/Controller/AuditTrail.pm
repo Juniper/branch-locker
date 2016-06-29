@@ -38,6 +38,8 @@ use namespace::autoclean;
 
 BEGIN { extends 'Catalyst::Controller'; }
 
+my $EMPTY_STR = q{};
+
 =head1 METHODS
 
 =cut
@@ -48,10 +50,11 @@ sub audittrail :Global {
     my $gui_api_key = $c->config->{'gui_api_key'};
     my $api_key_ref = $c->validate_api_key($gui_api_key);
     my $user        = $c->get_user;
+    my $parameters  = $c->req->parameters;
 
-    my $object_id   = $c->req->parameters->{'id'       };
-    my $object_type = $c->req->parameters->{'object'   };
-    my $no_wrapper  = $c->req->parameters->{'nowrapper'};
+    my $object_id   = $parameters->{'id'       };
+    my $object_type = $parameters->{'object'   };
+    my $no_wrapper  = $parameters->{'nowrapper'};
 
     my $errors_ref = [];
     if (! defined $object_id) {
@@ -63,6 +66,16 @@ sub audittrail :Global {
         push(@$errors_ref,
             'You must supply an object type to look up the audit trail.');
     }
+
+    my $bread_crumb_uri
+        = $c->uri_for("/$object_type") . "?id=$object_id";
+
+    my $bread_crumbs = [
+        { 'link' => $c->uri_for('/'), 'name' => 'Home' },
+        { 'link' => $bread_crumb_uri, 'name' => 'Back' },
+    ];
+
+    $c->stash->{'bread_crumbs'} = $bread_crumbs;
 
     if (scalar @$errors_ref) {
         $c->stash->{'nowrapper'} = $no_wrapper;
