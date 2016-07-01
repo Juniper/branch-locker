@@ -54,7 +54,7 @@ sub audittrail :Global {
 
     my $object_id   = $parameters->{'id'       };
     my $object_type = $parameters->{'object'   };
-    my $no_wrapper  = $parameters->{'nowrapper'};
+    my $no_wrapper  = $parameters->{'no_wrapper'};
 
     my $errors_ref = [];
     if (! defined $object_id) {
@@ -78,7 +78,7 @@ sub audittrail :Global {
     $c->stash->{'bread_crumbs'} = $bread_crumbs;
 
     if (scalar @$errors_ref) {
-        $c->stash->{'nowrapper'} = $no_wrapper;
+        $c->stash->{'no_wrapper'} = $no_wrapper;
         $c->stash->{'errors'   } = $errors_ref;
         $c->stash->{'error'    } = 'Could not look up audit trail.';
         $c->stash->{'template' } = 'error.tt2';
@@ -91,7 +91,7 @@ sub audittrail :Global {
             = map { $audit_transactions->{$_} }
             sort { $b <=> $a } keys %$audit_transactions;
 
-        $c->stash->{'nowrapper'  } = $no_wrapper;
+        $c->stash->{'no_wrapper'  } = $no_wrapper;
         $c->stash->{'audit_trail'} = \@audit_trail;
         $c->stash->{'object_type'} = $object_type;
         $c->stash->{'template'   } = 'view-audit-trail.tt2';

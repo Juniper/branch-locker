@@ -21,8 +21,10 @@ limitations under the License.
 <html>
     <head>
         <title>[% template.title or site.title %]</title>
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js">
-        </script>
+        <!-- script
+src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script -->
+        <script src="[% c.uri_for('/static/javascript/jquery.min.js') %]"></script>
+        <script src="[% c.uri_for('/static/javascript/main.js') %]"></script>
         <style type="text/css">
             [% PROCESS ttsite.css %]
         </style>

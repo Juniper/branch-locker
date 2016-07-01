@@ -165,12 +165,16 @@ limitations under the License.
     </div>
     <div class="audit-trail">
         <h2>Audit-Trail:</h2>
-        <div class="audit-trail-data">
+        <div class="audit-trail-data audit-break">
             <div class="view-audit-trail">
                 <table>
-                    <tr><td>Click <a href="[% link_to_audit_trail %]">here</a> to view audit trail.</td></tr>
+                    <tr><td>Click <a
+                        class="audit-trail-link"
+                        href="[% link_to_audit_trail %]"
+                    >here</a> to view audit trail.</td></tr>
                 </table>
             </div>
         </div>
     </div>
 </div>
+<script type="text/javascript">rewriteAuditTrailLinks();</script>
