@@ -387,3 +387,37 @@ td.eat-action {
 td.oat-action {
     background-color: #f8f8f8;
 }
+
+.branch-tabs ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #f1f1f1;
+    text-align: center;
+}
+
+.branch-tabs li {
+    display: inline;
+}
+
+a.branch-tab-link {
+    display: inline-block;
+    color: black;
+    text-align: center;
+    padding: 10px 10px;
+    text-decoration: none;
+    font-size: 17px;
+}
+
+a.branch-tab-link:hover {
+    background-color: #dddddd;
+}
+
+a.branch-tab-link:focus, .active {
+    background-color: #cccccc;
+}
+
+.branch-data h1 {
+    text-align: center;
+}

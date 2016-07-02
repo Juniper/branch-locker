@@ -16,6 +16,7 @@
 
 {
     'name'       => 'BranchLocker',
+    'domain'     => 'example.com',
     'word'       => 'Default',
     #'broadcasts' => [
     #    'Some Message.'
@@ -42,5 +43,18 @@
         'database_servers' => {
             'local' => ['localhost'],
         },
-    }
+    },
+
+    'group_order' => [
+        'Production',
+        'Service',
+        'Development',
+        'Integration',
+    ],
+    'group_mapping' => {
+        'Production'  => ['Production', 'Feature', 'Release'],
+        'Service'     => ['Service', 'Exception'],
+        'Development' => ['Development'],
+        'Integration' => ['Integration'],
+     },
 }

@@ -380,6 +380,7 @@ my $get_locks_criteria_dispatch_ref = {
     'repository'  => \&get_locks_handle_location_keys,
     'gate_keeper' => \&get_locks_handle_gate_keeper_key,
     'state'       => \&get_locks_handle_state_key,
+    'grouped'     => \&get_locks_handle_grouped_key,
     $UNKNOWN_KEY  => \&get_locks_handle_unknown_key,
 };
 
@@ -582,6 +583,32 @@ sub get_locks_handle_state_key($)
     return undef if (! defined $state);
 
     my $resulting_sql = "$schema_name.view_locks.state = '$state'";
+    $criteria_ref->{'cache'}->{$subroutine} = $resulting_sql;
+    return $resulting_sql;
+}
+
+=item get_locks_handle_grouped_key($)
+
+Look up locks according to Grouped value.
+
+=cut
+
+sub get_locks_handle_grouped_key($)
+{
+    my $criteria_ref = shift;
+    my $subroutine   = (caller(0))[3];
+
+    my $cache = $criteria_ref->{'cache'}->{$subroutine};
+    return undef if (defined $cache);
+
+    my $grouped = $criteria_ref->{'grouped'};
+    return undef if (! defined $grouped);
+
+    my $group_values = get_array_ref_from_ref($grouped);
+    my @quoted_group_values = map { DBWrap::sql_quote($_) } @$group_values;
+    my $grouped_string = join(',', @quoted_group_values);
+
+    my $resulting_sql = "$schema_name.view_locks.grouped in ($grouped_string)";
     $criteria_ref->{'cache'}->{$subroutine} = $resulting_sql;
     return $resulting_sql;
 }

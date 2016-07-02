@@ -18,37 +18,20 @@ limitations under the License.
 %]
 
 [% META title = 'Welcome to Branch Locker' %]
-<div class="quick-links">
-    <h1>Branch Status</h1>
-    [% FOREACH link IN release_types %]
-        <a href="#[% link | html %]">[% link | html%]</a>
-    [% END %]
-</div>
-<div class="grid-table">
-    <table>
-    [% FOREACH table IN tables %]
-        <tr><td colspan=3>
-            <div class="label-table"><a id="[% table.label | html %]">[% table.label | html %]</a></div>
-        </td></tr>
-        <tr>
-            <th>Branch Name</th>
-            <th>Status</th>
-            <th>Request commit access from gatekeepers</th>
-        </tr>
-        [% FOREACH lock IN table.locks %]
-            [% IF loop.index % 2 %]
-        <tr class="even-row">
-            [% ELSE %]
-        <tr class="odd-row">
-            [% END %]
-            <td><a href="[%
-                c.uri_for('/lock') _ "?id=$lock.id"
-            %]">[% lock.name | html %]</a>
-            </td>
-            <td>[% lock.status | html %]</td>
-            <td><a href="[% lock.email_gate_keepers | html %]">[% lock.gate_keepers | html %]</a></td>
-        </tr>
+
+<div class="branch-tabs">
+    <ul class="tab">
+        [% FOREACH group IN groups %]
+        <li><a
+            href="/group_locks?grouped=[% group | html %]"
+            class="branch-tab-link"
+        >[% group | html %]</a></li>
         [% END %]
-    [% END %]
-    </table>
+    </ul>
 </div>
+
+<div class="branch-data">
+<h1>Please select a branch lock group.</h1>
+</div>
+
+<script type="text/javascript">rewriteBranchTabLinks();</script>
