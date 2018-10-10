@@ -159,7 +159,7 @@ CREATE TABLE bl_link_pr_to_enforcement_is_allowed(
 CREATE OR REPLACE FUNCTION get_connection_variable(arg_key text) RETURNS text AS $$
 BEGIN
     IF EXISTS (SELECT * FROM information_schema.tables WHERE table_name = 'connection_variables') THEN
-        RETURN (SELECT value FROM connection_variables WHERE connection_variables.key = arg_key);
+        RETURN (SELECT value FROM connection_variables WHERE connection_variables.conn_key = arg_key);
     ELSE
         RETURN NULL;
     END IF;
@@ -169,24 +169,24 @@ $$ LANGUAGE 'plpgsql';
 CREATE OR REPLACE FUNCTION set_connection_variable(arg_key text, arg_value text) RETURNS text AS $$
 BEGIN
     IF EXISTS (SELECT * FROM information_schema.tables WHERE table_name = 'connection_variables') THEN
-        IF EXISTS (SELECT value FROM connection_variables WHERE key = arg_key) THEN
+        IF EXISTS (SELECT conn_value FROM connection_variables WHERE conn_key = arg_key) THEN
             UPDATE connection_variables
-            SET    value = arg_value
-            WHERE  key   = arg_key;
+            SET    conn_value = arg_value
+            WHERE  conn_key   = arg_key;
         ELSE
-            INSERT INTO connection_variables (key, value)
+            INSERT INTO connection_variables (conn_key, conn_value)
             VALUES (arg_key, arg_value);
         END IF;
     ELSE
-        CREATE TEMP TABLE connection_variables (key text, value text);
-        INSERT INTO connection_variables (key, value)
+        CREATE TEMP TABLE connection_variables (conn_key text, conn_value text);
+        INSERT INTO connection_variables (conn_key, conn_value)
         VALUES (arg_key, arg_value);
     END IF;
 
     RETURN (
-        SELECT value
+        SELECT conn_value
         FROM   connection_variables
-        WHERE  key = arg_key
+        WHERE  conn_key = arg_key
     );
 END;
 $$ LANGUAGE 'plpgsql';
